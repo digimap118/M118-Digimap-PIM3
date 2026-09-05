@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>index.html</title>
+<title>M118 Digimap PIM 3</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 :root{--blue:#1769ff;--ink:#172033;--muted:#748096;--line:#e7ebf2;--bg:#f6f8fb;--card:#fff;--green:#0b9b67;--red:#e24a4a;--cyan:#dff8ff}
@@ -30,11 +30,11 @@ table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:10px 12p
 <div class="title">Pondok Indah Mall 3</div>
 <div class="sub">Weekly & Daily Sales Dashboard • Dynamic Excel Update</div>
 <div class="tabs">
-<button class="tab active" onclick="show('weekly',this)">Weekly Report</button>
-<button class="tab" onclick="show('daily',this)">Daily Sales</button>
-<button class="tab" onclick="show('staff',this)">Staff</button>
-<button class="tab" onclick="show('lob',this)">LOB</button>
-<button class="tab" onclick="show('update',this)">Update Excel</button>
+<button type="button" class="tab active" data-section="weekly">Weekly Report</button>
+<button type="button" class="tab" data-section="daily">Daily Sales</button>
+<button type="button" class="tab" data-section="staff">Staff</button>
+<button type="button" class="tab" data-section="lob">LOB</button>
+<button type="button" class="tab" data-section="update">Update Excel</button>
 </div>
 </div>
 
@@ -108,11 +108,22 @@ table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:10px 12p
 let appData={rows:[],staff:[],date:null};
 
 function show(id,btn){
-document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-btn.classList.add('active');
+  document.querySelectorAll('section').forEach(function(s){
+    s.classList.add('hidden');
+  });
+  var target=document.getElementById(id);
+  if(target) target.classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(function(x){
+    x.classList.remove('active');
+  });
+  if(btn) btn.classList.add('active');
 }
+
+document.querySelectorAll('.tab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    show(this.getAttribute('data-section'),this);
+  });
+});
 
 function money(v){return "Rp "+Math.round(Number(v)||0).toLocaleString("id-ID")}
 function safe(v){return String(v??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
